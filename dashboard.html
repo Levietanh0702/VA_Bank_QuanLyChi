@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VA BANK - Dashboard</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+
+  <div class="phone-frame">
+    <div class="screen">
+
+      <!-- Header -->
+      <div class="header-row">
+        <div class="logo-block">
+          <div class="logo-circle-small">
+            <i class="fa-solid fa-dove logo-icon-small"></i>
+          </div>
+          <span class="brand-name-small">VA BANK</span>
+        </div>
+        <div class="balance-box">
+          <span class="balance-label">Tổng số dư:</span>
+          <span class="balance-value" id="balanceValue">0 vnđ</span>
+        </div>
+      </div>
+
+      <p class="greeting" id="greetingText">Xin chào user</p>
+
+      <!-- Grid 6 nút chức năng -->
+      <div class="btn-grid">
+        <button class="fn-btn yellow" data-action="savings"><i class="fa-solid fa-piggy-bank"></i> Tiết kiệm</button>
+        <button class="fn-btn gray" data-action="stats"><i class="fa-solid fa-chart-pie"></i> Thống kê</button>
+        <button class="fn-btn pink" data-action="pay"><i class="fa-solid fa-money-check-dollar"></i> Thanh toán</button>
+        <button class="fn-btn gray" data-action="history"><i class="fa-solid fa-clock-rotate-left"></i> Lịch sử</button>
+        <button class="fn-btn purple" data-action="interest"><i class="fa-solid fa-sack-dollar"></i> Số dư mới</button>
+        <button class="fn-btn blue" data-action="deposit"><i class="fa-solid fa-plus"></i> Thêm tiền</button>
+      </div>
+
+      <button class="logout-link" id="btnLogout">Đăng xuất</button>
+      <button class="reset-link" id="btnReset">Xóa toàn bộ dữ liệu</button>
+
+    </div>
+  </div>
+
+  <!-- ===== Modal: Thêm tiền ===== -->
+  <div class="modal-overlay" id="modalDeposit" style="display:none;">
+    <div class="modal-box">
+      <h3><i class="fa-solid fa-plus"></i> Thêm tiền</h3>
+      <input type="number" id="depositAmount" placeholder="Số tiền (VNĐ)" min="1" />
+      <input type="text" id="depositNote" placeholder="Ghi chú (tùy chọn)" />
+      <div class="modal-msg" id="depositMsg"></div>
+      <div class="modal-actions">
+        <button class="btn-secondary" data-close>Hủy</button>
+        <button class="btn-primary" id="submitDeposit">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Modal: Thanh toán ===== -->
+  <div class="modal-overlay" id="modalPay" style="display:none;">
+    <div class="modal-box">
+      <h3><i class="fa-solid fa-money-check-dollar"></i> Thanh toán</h3>
+      <input type="number" id="payAmount" placeholder="Số tiền (VNĐ)" min="1" />
+      <select id="payCategory">
+        <option value="Tiêu hoang">Tiêu hoang</option>
+        <option value="Tiêu hợp lý">Tiêu hợp lý</option>
+        <option value="Tiêu phát sinh">Tiêu phát sinh</option>
+      </select>
+      <input type="text" id="payNote" placeholder="Ghi chú (tùy chọn)" />
+      <div class="modal-msg" id="payMsg"></div>
+      <div class="modal-actions">
+        <button class="btn-secondary" data-close>Hủy</button>
+        <button class="btn-primary" id="submitPay">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Modal: Tiết kiệm ===== -->
+  <div class="modal-overlay" id="modalSavings" style="display:none;">
+    <div class="modal-box">
+      <h3><i class="fa-solid fa-piggy-bank"></i> Mục tiêu tiết kiệm</h3>
+      <input type="number" id="savingsGoalInput" placeholder="Số tiền muốn giữ lại (VNĐ)" min="0" />
+      <input type="text" id="savingsNoteInput" placeholder="Ghi chú mục tiêu" />
+      <div class="modal-msg" id="savingsMsg"></div>
+      <div class="modal-actions">
+        <button class="btn-secondary" data-close>Hủy</button>
+        <button class="btn-primary" id="submitSavings">Lưu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Modal: Số dư mới (tính lãi tiết kiệm) ===== -->
+  <div class="modal-overlay" id="modalInterest" style="display:none;">
+    <div class="modal-box">
+      <h3><i class="fa-solid fa-sack-dollar"></i> Cập nhật số dư mới</h3>
+      <p class="modal-desc">Tính lãi tiết kiệm hàng tháng theo công thức:<br><b>Lãi = (Số tiền tiết kiệm × 4%) / 12</b><br>và cộng trực tiếp vào Tổng số dư.</p>
+      <div class="modal-msg" id="interestMsg"></div>
+      <div class="modal-actions">
+        <button class="btn-secondary" data-close>Hủy</button>
+        <button class="btn-primary" id="submitInterest">Tính lãi ngay</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Modal: Lịch sử ===== -->
+  <div class="modal-overlay" id="modalHistory" style="display:none;">
+    <div class="modal-box modal-wide">
+      <h3><i class="fa-solid fa-clock-rotate-left"></i> Lịch sử giao dịch</h3>
+      <div class="history-list" id="historyList">
+        <p class="empty-text">Đang tải...</p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" data-close>Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Modal: Thống kê ===== -->
+  <div class="modal-overlay" id="modalStats" style="display:none;">
+    <div class="modal-box modal-wide">
+      <h3><i class="fa-solid fa-chart-pie"></i> Thống kê chi tiêu</h3>
+      <p class="chart-title">Chi tiêu theo ngày</p>
+      <canvas id="dailyChart" height="180"></canvas>
+      <p class="chart-title">Tỉ lệ theo nhóm chi tiêu</p>
+      <canvas id="categoryChart" height="180"></canvas>
+      <div class="modal-actions">
+        <button class="btn-secondary" data-close>Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+
+body { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #e9eef1; }
+
+.phone-frame {
+  width: 390px; max-width: 100vw; min-height: 100vh;
+  background: linear-gradient(180deg, #3fae87 0%, #2f8f6f 45%, #dff5ec 100%);
+  position: relative; overflow: hidden;
+}
+@media (min-width: 480px) {
+  .phone-frame { min-height: 800px; border-radius: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); border: 8px solid #1a1a1a; }
+}
+
+.screen { padding: 24px 22px; color: #fff; }
+
+/* ===== Header ===== */
+.header-row { display: flex; align-items: center; gap: 12px; }
+.logo-block { display: flex; flex-direction: column; align-items: center; width: 78px; flex-shrink: 0; }
+.logo-circle-small {
+  width: 54px; height: 54px; border-radius: 50%; background: rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+}
+.logo-icon-small { font-size: 24px; background: linear-gradient(135deg,#ff8a3d,#e0299b,#4b3bdb); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.brand-name-small { color: #fef3c7; font-weight: 700; font-size: 13px; margin-top: 4px; }
+
+.balance-box {
+  flex: 1; background: #5fd8ea; border-radius: 14px; padding: 14px 16px;
+  color: #06323a; display: flex; flex-direction: column; gap: 4px;
+}
+.balance-label { font-weight: 600; font-size: 14px; }
+.balance-value { font-size: 22px; font-weight: 800; text-align: right; }
+
+.greeting { margin-top: 18px; font-size: 15px; color: #f2fff8; }
+
+/* ===== Grid nút chức năng ===== */
+.btn-grid {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 14px;
+  justify-items: stretch;
+}
+.fn-btn {
+  border: none; border-radius: 16px; padding: 22px 10px;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  transition: transform 0.12s ease;
+}
+.fn-btn:active { transform: scale(0.96); }
+.fn-btn i { font-size: 20px; }
+
+.fn-btn.yellow { background: #e8d16b; color: #4a3b00; }
+.fn-btn.gray   { background: #dcdcdc; color: #333; }
+.fn-btn.pink   { background: #9c3b7d; color: #fff; }
+.fn-btn.purple { background: #3a2f9e; color: #fff; }
+.fn-btn.blue   { background: #2244cc; color: #fff; }
+
+/* "Thanh toán" nằm căn giữa 1 mình ở hàng riêng theo thiết kế gốc */
+.btn-grid button[data-action="pay"] { grid-column: 1 / span 2; width: 60%; margin: 0 auto; }
+
+.logout-link, .reset-link {
+  display: block; margin: 22px auto 0; background: none; border: none;
+  color: rgba(255,255,255,0.85); text-decoration: underline; cursor: pointer; font-size: 13px;
+}
+.reset-link { color: #ffd1d1; margin-top: 10px; }
+
+/* ===== Modals (dùng chung) ===== */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+  display: flex; align-items: center; justify-content: center; z-index: 999; padding: 16px;
+}
+.modal-box {
+  background: #fff; border-radius: 16px; padding: 22px; width: 340px; max-width: 100%;
+  color: #222; max-height: 88vh; overflow-y: auto;
+}
+.modal-box.modal-wide { width: 420px; }
+.modal-box h3 { margin-bottom: 14px; display: flex; align-items: center; gap: 8px; color: #234; }
+.modal-desc { font-size: 13px; color: #555; margin-bottom: 14px; line-height: 1.5; }
+
+.modal-box input, .modal-box select {
+  width: 100%; padding: 11px 12px; margin-bottom: 12px;
+  border: 1px solid #ccc; border-radius: 8px; font-size: 14px;
+}
+
+.modal-msg { font-size: 13px; margin-bottom: 8px; min-height: 16px; }
+.modal-msg.error { color: #b00020; }
+.modal-msg.success { color: #0a7d32; }
+.modal-msg.warning { color: #b8860b; font-weight: 600; }
+
+.modal-actions { display: flex; gap: 10px; margin-top: 6px; }
+.modal-actions button { flex: 1; padding: 11px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; }
+.btn-secondary { background: #eee; color: #333; }
+.btn-primary { background: #2244cc; color: #fff; }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ===== Lịch sử ===== */
+.history-list { max-height: 340px; overflow-y: auto; margin-bottom: 8px; }
+.history-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 4px; border-bottom: 1px solid #eee; font-size: 13px;
+}
+.history-item .amount.income { color: #0a7d32; font-weight: 700; }
+.history-item .amount.expense { color: #b00020; font-weight: 700; }
+.history-item .meta { color: #888; font-size: 11px; }
+.empty-text { text-align: center; color: #888; padding: 24px 0; }
+
+.chart-title { font-size: 13px; font-weight: 600; margin: 14px 0 6px; color: #234; }
